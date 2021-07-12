@@ -1,8 +1,9 @@
 """Store the classes and fixtures used throughout the tests."""
-from _pytest.tmpdir import TempdirFactory
-import pytest
 
 from shutil import copyfile
+
+import pytest
+from _pytest.tmpdir import TempdirFactory
 
 from pynbox.config import Config
 
@@ -14,5 +15,7 @@ def fixture_config(tmpdir_factory: TempdirFactory) -> Config:
     config_file = str(data.join("config.yaml"))
     copyfile("tests/assets/config.yaml", config_file)
     config = Config(config_file)
+    config["database_url"] = f"tinydb://{data}/database.tinydb"
+    config.save()
 
     return config

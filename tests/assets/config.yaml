@@ -1,3 +1,7 @@
 ---
-# Level of logging verbosity. One of ['info', 'debug', 'warning'].
-verbose: info
+types:
+  task:
+    regexp: t\.
+    priority: 4
+  idea:
+    regexp: i\.

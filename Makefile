@@ -75,7 +75,7 @@ test-code:
 	@echo "- Testing code -"
 	@echo "----------------"
 
-	pytest --cov-report term-missing --cov src tests ${ARGS}
+	pytest --cov-report term-missing --cov src tests/* ${ARGS}
 
 	@echo ""
 

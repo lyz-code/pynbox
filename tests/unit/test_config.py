@@ -21,7 +21,7 @@ def test_config_load(config: Config) -> None:
     """Loading the configuration from the yaml file works."""
     config.load()  # act
 
-    assert config.data["verbose"] == "info"
+    assert config.data["types"]["task"]["priority"] == 4
 
 
 @patch("pynbox.config.YAML")

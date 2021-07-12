@@ -1,16 +1,15 @@
 """Python package building configuration."""
 
+import logging
+import os
 import re
+import shutil
 from glob import glob
 from os.path import basename, splitext
 
 from setuptools import find_packages, setup
-import logging
-import os
-import shutil
-from setuptools.command.install import install
 from setuptools.command.egg_info import egg_info
-
+from setuptools.command.install import install
 
 log = logging.getLogger(__name__)
 
@@ -95,5 +94,6 @@ setup(
     install_requires=[
         "Click",
         "ruamel.yaml",
+        "repository-orm",
     ],
 )
