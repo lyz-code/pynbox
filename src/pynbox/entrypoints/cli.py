@@ -1,14 +1,10 @@
 """Command line interface definition."""
 
 import click
-from pynbox import version
-from pynbox.entrypoints import (
-    load_config,
-    load_logger,
-)
-
-
 from click.core import Context
+
+from .. import services, version
+from . import get_repo, load_config, load_logger
 
 
 @click.group()
@@ -27,7 +23,16 @@ def cli(ctx: Context, config_path: str, verbose: bool) -> None:
     ctx.ensure_object(dict)
 
     ctx.obj["config"] = load_config(config_path)
+    ctx.obj["repo"] = get_repo(ctx.obj["config"])
     load_logger(verbose)
+
+
+@cli.command()
+@click.argument("file_path")
+@click.pass_context
+def parse(ctx: Context, file_path: str) -> None:
+    """Parse a markup file and add the elements to the repository."""
+    services.parse_file(ctx.obj["config"], ctx.obj["repo"], file_path)
 
 
 @cli.command(hidden=True)

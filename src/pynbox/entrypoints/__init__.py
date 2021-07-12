@@ -7,8 +7,11 @@ Functions:
 import logging
 import sys
 
+from repository_orm import Repository, load_repository
+
 from pynbox.config import Config, ConfigError
 
+from ..model import Element
 
 log = logging.getLogger(__name__)
 
@@ -26,6 +29,14 @@ def load_config(config_path: str) -> Config:
         sys.exit(1)
 
     return config
+
+
+def get_repo(config: Config) -> Repository:
+    """Configure the repository."""
+    log.debug("Initializing repository")
+    repo = load_repository([Element], config["database_url"])
+
+    return repo
 
 
 # I have no idea how to test this function :(. If you do, please send a PR.

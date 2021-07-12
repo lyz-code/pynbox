@@ -1,3 +1,16 @@
 ---
-# Level of logging verbosity. One of ['info', 'debug', 'warning'].
-verbose: info
+# URL specifying the connection to the database. For example:
+#   * tinydb: tinydb:////home/user/database.tinydb
+#   * sqlite: sqlite:////home/user/mydb.sqlite
+#   * mysql: mysql://scott:tiger@localhost/mydatabase
+database_url: tinydb://~/.local/share/pynbox/database.tinydb
+
+# List of element types. Each element can define:
+#   * regexp: regular expression that identifies it
+#   * priority: type priority, by default 3.
+types:
+  task:
+    regexp: t\.
+    priority: 4
+  idea:
+    regexp: i\.
