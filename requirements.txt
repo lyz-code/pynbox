@@ -28,7 +28,7 @@ sqlparse==0.4.1
     # via yoyo-migrations
 tabulate==0.8.9
     # via yoyo-migrations
-tinydb==4.5.0
+tinydb==4.5.1
     # via
     #   repository-orm
     #   tinydb-serialization
@@ -38,6 +38,7 @@ typing-extensions==3.10.0.0
     # via
     #   importlib-metadata
     #   pydantic
+    #   tinydb
 yoyo-migrations==7.3.2
     # via repository-orm
 zipp==3.5.0
