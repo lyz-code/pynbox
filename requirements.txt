@@ -16,7 +16,7 @@ pydantic==1.8.2
     # via repository-orm
 pymysql==1.0.2
     # via repository-orm
-pypika==0.48.7
+pypika==0.48.8
     # via repository-orm
 repository-orm==0.5.1
     # via pynbox (setup.py)
