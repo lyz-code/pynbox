@@ -8,7 +8,7 @@ click==8.0.1
     # via pynbox (setup.py)
 deepdiff==5.5.0
     # via repository-orm
-importlib-metadata==4.6.1
+importlib-metadata==4.6.2
     # via click
 ordered-set==4.0.2
     # via deepdiff
