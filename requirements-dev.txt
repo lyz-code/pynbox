@@ -412,7 +412,7 @@ pyyaml-env-tag==0.1
     #   mkdocs
 regex==2021.8.3
     # via black
-repository-orm==0.5.1
+repository-orm==0.5.3
     # via -r requirements.txt
 requests==2.26.0
     # via
@@ -534,7 +534,7 @@ zipp==3.5.0
     #   pep517
 
 # The following packages are considered to be unsafe in a requirements file:
-pip==21.2.3
+pip==21.2.4
     # via pip-tools
 setuptools==57.4.0
     # via

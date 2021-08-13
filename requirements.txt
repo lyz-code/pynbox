@@ -18,7 +18,7 @@ pymysql==1.0.2
     # via repository-orm
 pypika==0.48.8
     # via repository-orm
-repository-orm==0.5.1
+repository-orm==0.5.3
     # via pynbox (setup.py)
 ruamel.yaml==0.17.10
     # via pynbox (setup.py)
