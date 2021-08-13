@@ -2,7 +2,13 @@
 [![Actions Status](https://github.com/lyz-code/pynbox/workflows/Build/badge.svg)](https://github.com/lyz-code/pynbox/actions)
 [![Coverage Status](https://coveralls.io/repos/github/lyz-code/pynbox/badge.svg?branch=master)](https://coveralls.io/github/lyz-code/pynbox?branch=master)
 
-Task management inbox tool
+`pynbox` aims to help you with the daily [emptying of the
+inbox](https://lyz-code.github.io/blue-book/task_tools/#inbox) by:
+
+* Prioritizing the elements by their type.
+* Giving insights on the inbox status.
+* Giving feedback on the inbox processing process.
+* Making the insertion of new elements as effortless as possible.
 
 # Installing
 
@@ -10,11 +16,21 @@ Task management inbox tool
 pip install pynbox
 ```
 
-# A Simple Example
+# Quick overview
 
-```python
-{! examples/simple-example.py !} # noqa
-```
+![ ](screencast.gif)
+
+# Proposed workflow
+
+When you're on your desktop you can add elements directly with the [command
+line](creating_new_elements.md#command-line), when you're on the go, use any
+text editor, such as
+[Markor](https://f-droid.org/en/packages/net.gsantner.markor/), and sync the
+file with [Syncthing](https://lyz-code.github.io/blue-book/linux/syncthing/) to
+your laptop, and then [parse the file](creating_new_elements.md#parse-a-file).
+
+To process the elements, you can daily use `pynbox process`. If you want to
+focus on a category, use `pynbox process category`.
 
 # References
 

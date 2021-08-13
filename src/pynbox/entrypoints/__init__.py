@@ -5,8 +5,12 @@ Functions:
 """
 
 import logging
+import os
 import sys
+from contextlib import suppress
+from shutil import copyfile
 
+import pkg_resources
 from repository_orm import Repository, load_repository
 
 from pynbox.config import Config, ConfigError
@@ -19,16 +23,26 @@ log = logging.getLogger(__name__)
 def load_config(config_path: str) -> Config:
     """Load the configuration from the file."""
     log.debug(f"Loading the configuration from file {config_path}")
-    try:
-        config = Config(config_path)
-    except ConfigError as error:
-        log.error(f"Configuration Error: {str(error)}")
-        sys.exit(1)
-    except FileNotFoundError:
-        log.error(f"Error opening configuration file {config_path}")
-        sys.exit(1)
+    config_path = os.path.expanduser(config_path)
 
-    return config
+    with suppress(FileExistsError):
+        data_directory = os.path.expanduser("~/.local/share/pynbox")
+        os.makedirs(data_directory)
+        log.debug("Data directory created")  # pragma: no cover
+
+    while True:
+        try:
+            return Config(config_path)
+        except ConfigError as error:
+            log.error(f"Configuration Error: {str(error)}")
+            sys.exit(1)
+        except FileNotFoundError:
+            log.info(f"Error opening configuration file {config_path}")
+            copyfile(
+                pkg_resources.resource_filename("pynbox", "assets/config.yaml"),
+                config_path,
+            )
+            log.info("Copied default configuration template")
 
 
 def get_repo(config: Config) -> Repository:
@@ -52,9 +66,9 @@ def load_logger(verbose: bool = False) -> None:  # pragma no cover
     logging.addLevelName(logging.WARNING, "[\033[33m+\033[0m]")
     if verbose:
         logging.basicConfig(
-            stream=sys.stderr, level=logging.DEBUG, format="  %(levelname)s %(message)s"
+            stream=sys.stderr, level=logging.DEBUG, format="%(levelname)s %(message)s"
         )
     else:
         logging.basicConfig(
-            stream=sys.stderr, level=logging.INFO, format="  %(levelname)s %(message)s"
+            stream=sys.stderr, level=logging.INFO, format="%(levelname)s %(message)s"
         )

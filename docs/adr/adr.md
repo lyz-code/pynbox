@@ -15,9 +15,9 @@ graph TD
     click 002 "https://lyz-code.github.io/pynbox/adr/002-initial_program_design" _blank
     click 002 "https://lyz-code.github.io/pynbox/adr/003-markup_definition" _blank
 
-    001:::draft
-    002:::draft
-    003:::draft
+    001:::accepted
+    002:::accepted
+    003:::accepted
 
     classDef draft fill:#CDBFEA;
     classDef proposed fill:#B1CCE8;

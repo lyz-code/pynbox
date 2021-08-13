@@ -5,8 +5,12 @@
 #   * mysql: mysql://scott:tiger@localhost/mydatabase
 database_url: tinydb://~/.local/share/pynbox/database.tinydb
 
+# Maximum time to process an element. A warning will be shown if it takes you
+# longer.
+max_time: 120
+
 # List of element types. Each element can define:
-#   * regexp: regular expression that identifies it
+#   * regexp: non capturing regular expression that identifies it
 #   * priority: type priority, by default 3.
 types:
   task:

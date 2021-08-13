@@ -1,14 +1,16 @@
 """Define the configuration of the main program."""
 
 import logging
+import operator
 import os
 from collections import UserDict
 from typing import Any, Dict, List, Union
 
-# It complains that ruamel.yaml doesn't have the object YAML, but it does.
 from ruamel.yaml import YAML  # type: ignore
 from ruamel.yaml.parser import ParserError
 from ruamel.yaml.scanner import ScannerError
+
+# It complains that ruamel.yaml doesn't have the object YAML, but it does.
 
 log = logging.getLogger(__name__)
 
@@ -64,8 +66,6 @@ class Config(UserDict):  # type: ignore # noqa: R0901
             try:
                 value = value[config_key]
             except KeyError as error:
-                if default is not None:
-                    return default
                 raise ConfigError(
                     f"Failed to fetch the configuration {config_key} "
                     f"when searching for {original_key}"
@@ -112,7 +112,7 @@ class Config(UserDict):  # type: ignore # noqa: R0901
                 except (ParserError, ScannerError) as error:
                     raise ConfigError(str(error)) from error
         except FileNotFoundError as error:
-            raise ConfigError(
+            raise FileNotFoundError(
                 "The configuration file {self.config_path} could not be found."
             ) from error
 
@@ -122,3 +122,20 @@ class Config(UserDict):  # type: ignore # noqa: R0901
             yaml = YAML()
             yaml.default_flow_style = False
             yaml.dump(self.data, file_cursor)
+
+    def types(self) -> List[str]:
+        """Return an ordered list of element types."""
+        types_dict = []
+        for type_name, type_value in self["types"].items():
+            try:
+                types_dict.append(
+                    {"name": type_name, "priority": type_value["priority"]}
+                )
+            except KeyError:
+                types_dict.append({"name": type_name, "priority": 3})
+        return [
+            type_["name"]
+            for type_ in sorted(
+                types_dict, key=operator.itemgetter("priority"), reverse=True
+            )
+        ]

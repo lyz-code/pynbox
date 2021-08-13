@@ -15,7 +15,6 @@ The information to extract from each element is:
 * Description.
 * Body
 * Element type.
-* Priority.
 
 # Proposals
 <!-- What are the possible solutions to the problem described in the context -->
