@@ -4,12 +4,16 @@ site_author: Lyz
 site_url: https://lyz-code.github.io/pynbox
 nav:
   - pynbox: index.md
+  - Creating new elements: creating_new_elements.md
+  - Configuration: configuration.md
   - Reference: reference.md
   - Contributing: contributing.md
   - Architecture Decision Records:
       - adr/adr.md
       - '001: High level problem analysis': |
           adr/001-high_level_problem_analysis.md
+      - '002: Initial program design': adr/002-initial_program_design.md
+      - '003: Markup Definition': adr/003-markup_definition.md
 
 plugins:
   - search

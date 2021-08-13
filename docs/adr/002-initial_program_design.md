@@ -3,7 +3,7 @@ Date: 2021-07-12
 # Status
 <!-- What is the status? Draft, Proposed, Accepted, Rejected, Deprecated or Superseded?
 -->
-Draft
+Accepted
 
 # Context
 <!-- What is the issue that we're seeing that is motivating this decision or change? -->
@@ -86,8 +86,7 @@ processing sessions. Postponing it will make the item show at the next session.
 The element prioritization is done by:
 
 * Element category type: Each category will have a priority.
-* Element creation date: The user will choose the order to address first the
-    oldest or the newest elements.
+* Element creation date: Ordered by oldest first.
 
 It will measure the time spent between each element, and if it surpasses
 a defined amount, it will warn the user, so it is aware of it and can act

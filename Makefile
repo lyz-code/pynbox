@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := test
-isort = isort src docs/examples tests setup.py
-black = black --target-version py37 src docs/examples tests setup.py
+isort = isort src tests setup.py
+black = black --target-version py37 src tests setup.py
 
 .PHONY: install
 install:
@@ -67,7 +67,7 @@ mypy:
 	@echo ""
 
 .PHONY: test
-test: test-code test-examples
+test: test-code
 
 .PHONY: test-code
 test-code:
@@ -123,7 +123,7 @@ clean:
 	@echo ""
 
 .PHONY: docs
-docs: test-examples
+docs:
 	@echo "-------------------------"
 	@echo "- Serving documentation -"
 	@echo "-------------------------"
@@ -158,7 +158,7 @@ build-package: clean
 	@echo ""
 
 .PHONY: build-docs
-build-docs: test-examples
+build-docs:
 	@echo "--------------------------"
 	@echo "- Building documentation -"
 	@echo "--------------------------"

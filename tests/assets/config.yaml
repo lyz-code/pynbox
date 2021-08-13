@@ -1,4 +1,5 @@
 ---
+max_time: 120
 types:
   task:
     regexp: t\.
