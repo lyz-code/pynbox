@@ -12,7 +12,7 @@ commonmark==0.9.1
     # via rich
 deepdiff==5.5.0
     # via repository-orm
-importlib-metadata==4.6.3
+importlib-metadata==4.6.4
     # via click
 ordered-set==4.0.2
     # via deepdiff
