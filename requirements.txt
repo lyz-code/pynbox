@@ -20,7 +20,7 @@ prompt-toolkit==3.0.19
     # via questionary
 pydantic==1.8.2
     # via repository-orm
-pygments==2.9.0
+pygments==2.10.0
     # via rich
 pymysql==1.0.2
     # via repository-orm
