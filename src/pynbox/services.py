@@ -164,5 +164,4 @@ def types(config: Config) -> List[str]:
     Returns:
         Ordered list of element types.
     """
-
     return list(config["types"].keys())
