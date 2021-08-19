@@ -1,3 +1,13 @@
+## 0.3.0 (2021-08-19)
+
+### Feat
+
+- add the -n (--newest) option to the process command
+
+### feat
+
+- add the change type option to the process command
+
 ## 0.2.0 (2021-08-13)
 
 ### Feat
