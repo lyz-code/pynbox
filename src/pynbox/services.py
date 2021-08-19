@@ -5,6 +5,7 @@ and handlers to achieve the program's purpose.
 """
 
 import logging
+import operator
 import re
 from contextlib import suppress
 from typing import Dict, List, Optional
@@ -102,13 +103,14 @@ def parse_file(config: Config, repo: Repository, file_path: str) -> None:
 
 
 def elements(
-    repo: Repository, config: Config, type_: Optional[str] = None
+    repo: Repository, config: Config, type_: Optional[str] = None, newest: bool = False
 ) -> List[Element]:
     """Fetch and order the elements to process.
 
     Args:
         repo: Repository where the elements live.
         type_: type of element to process.
+        newest: Whether to show newest items first
 
     Returns:
         Ordered list of elements to process.
@@ -121,7 +123,15 @@ def elements(
     elements = []
     for type_ in types:
         with suppress(EntityNotFoundError):
-            elements.extend(repo.search({"state": "open", "type_": type_}, Element))
+            new_elements = repo.search({"state": "open", "type_": type_}, Element)
+            if newest:
+                elements.extend(
+                    sorted(
+                        new_elements, key=operator.attrgetter("created"), reverse=True
+                    ),
+                )
+            else:
+                elements.extend(new_elements)
 
     return elements
 
@@ -143,3 +153,16 @@ def status(repo: Repository, config: Config) -> Dict[str, int]:
             if elements > 0:
                 status[type_] = elements
     return status
+
+
+def types(config: Config) -> List[str]:
+    """Get an ordered list of the types of elements from the config file.
+
+    Args:
+        config: Configuration object
+
+    Returns:
+        Ordered list of element types.
+    """
+
+    return list(config["types"].keys())

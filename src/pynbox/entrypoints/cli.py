@@ -78,8 +78,9 @@ def status(ctx: Context) -> None:
 
 @cli.command()
 @click.argument("type_", required=False, default=None)
+@click.option("-n", "--newest", is_flag=True)
 @click.pass_context
-def process(ctx: Context, type_: Optional[str] = None) -> None:
+def process(ctx: Context, type_: Optional[str] = None, newest: bool = False) -> None:
     """Create a TUI interface to process the elements."""
     console = Console()
     session_start = time.time()
@@ -89,9 +90,10 @@ def process(ctx: Context, type_: Optional[str] = None) -> None:
         Choice(title="Done", shortcut_key="d"),
         Choice(title="Skip", shortcut_key="s"),
         Choice(title="Delete", shortcut_key="e"),
+        Choice(title="Change type", shortcut_key="c"),
         Choice(title="Quit", shortcut_key="q"),
     ]
-    elements = services.elements(repo, config, type_)
+    elements = services.elements(repo, config, type_, newest)
     processed_elements = 0
     for element in elements:
         if element.body is None or element.body == "":
@@ -128,6 +130,12 @@ def process(ctx: Context, type_: Optional[str] = None) -> None:
             processed_elements += 1
         elif choice == "Skip":
             element.skip()
+        elif choice == "Change type":
+            types = services.types(config)
+            choice = select(
+                "Select the new type", choices=types, default=element.type_
+            ).ask()
+            element.type_ = choice
         elif choice == "Quit":
             break
         repo.add(element)
