@@ -340,3 +340,60 @@ def test_status_returns_the_pending_element_numbers_by_type(
         r"Task.*2.*\n.*Idea.*1",
         result.stdout,
     )
+
+
+def test_process_can_select_newest_order(config: Config) -> None:
+    """
+    Given: Two elements in the repository
+    When: the inbox processing command is used specifying the newest flag, the first
+        element is marked as done and the second as skipped
+    Then: The newest item is marked as done and the oldest as skipped
+
+    As we only give it one command (done), if both elements were shown, the test
+    will return an error as it will reach the timeout of pexpect.
+    """
+    # Add the elements
+    repo = load_repository(models=[Element], database_url=config["database_url"])
+    repo.add(Element(type_="task", description="Old task"))
+    repo.add(Element(type_="task", description="New task"))
+    repo.commit()
+    # Load the TUI
+    tui = pexpect.spawn(f"pynbox -c {config.config_path} process -n", timeout=5)
+    tui.logfile = sys.stdout.buffer
+    tui.expect(".*Quit.*")
+
+    tui.sendline("d")  # act
+
+    tui.sendline("s")
+    tui.expect_exact(pexpect.EOF)
+    old = repo.all(Element)[0]
+    new = repo.all(Element)[1]
+    assert old.state == ElementState.OPEN
+    assert new.state == ElementState.CLOSED
+
+
+def test_change_element_type(config: Config) -> None:
+    """
+    Given: An element in the repository
+    When: the inbox processing command is used and the change key is pressed
+    Then: the element type is changed
+    """
+    # Add the element
+    repo = load_repository(models=[Element], database_url=config["database_url"])
+    repo.add(Element(type_="task", description="Idea title"))
+    repo.commit()
+    # Load the TUI
+    tui = pexpect.spawn(f"pynbox -c {config.config_path} process", timeout=5)
+    tui.logfile = sys.stdout.buffer
+    tui.expect(".*Quit.*")
+
+    tui.sendline("c")  # act
+
+    tui.expect(".*Select the new type.*")
+    tui.sendline("j")
+    tui.expect_exact(pexpect.EOF)
+    element = repo.all(Element)[0]
+    assert element.type_ == "idea"
+    assert element.state == ElementState.OPEN
+    assert element.skips == 0
+    assert element.closed is None
