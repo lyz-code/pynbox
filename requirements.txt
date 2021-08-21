@@ -16,7 +16,7 @@ importlib-metadata==4.6.4
     # via click
 ordered-set==4.0.2
     # via deepdiff
-prompt-toolkit==3.0.19
+prompt-toolkit==3.0.20
     # via questionary
 pydantic==1.8.2
     # via repository-orm
