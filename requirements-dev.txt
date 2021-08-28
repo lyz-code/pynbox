@@ -431,7 +431,7 @@ pyyaml-env-tag==0.1
     #   mkdocs
 questionary==1.10.0
     # via -r requirements.txt
-regex==2021.8.27
+regex==2021.8.28
     # via black
 repository-orm==0.5.3
     # via -r requirements.txt
