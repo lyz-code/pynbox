@@ -12,7 +12,7 @@ commonmark==0.9.1
     # via rich
 deepdiff==5.5.0
     # via repository-orm
-importlib-metadata==4.7.1
+importlib-metadata==4.8.1
     # via click
 ordered-set==4.0.2
     # via deepdiff
@@ -30,9 +30,9 @@ questionary==1.10.0
     # via pynbox (setup.py)
 repository-orm==0.5.3
     # via pynbox (setup.py)
-rich==10.7.0
+rich==10.9.0
     # via pynbox (setup.py)
-ruamel.yaml==0.17.14
+ruamel.yaml==0.17.16
     # via pynbox (setup.py)
 ruamel.yaml.clib==0.2.6
     # via ruamel.yaml
@@ -46,7 +46,7 @@ tinydb==4.5.1
     #   tinydb-serialization
 tinydb-serialization==2.1.0
     # via repository-orm
-typing-extensions==3.10.0.0
+typing-extensions==3.10.0.1
     # via
     #   importlib-metadata
     #   pydantic
