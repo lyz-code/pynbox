@@ -36,7 +36,7 @@ ruamel.yaml==0.17.16
     # via pynbox (setup.py)
 ruamel.yaml.clib==0.2.6
     # via ruamel.yaml
-sqlparse==0.4.1
+sqlparse==0.4.2
     # via yoyo-migrations
 tabulate==0.8.9
     # via yoyo-migrations
