@@ -442,7 +442,7 @@ requests==2.26.0
     #   -r docs/requirements.txt
     #   mkdocs-htmlproofer-plugin
     #   safety
-rich==10.9.0
+rich==10.10.0
     # via -r requirements.txt
 ruamel.yaml==0.17.16
     # via -r requirements.txt
