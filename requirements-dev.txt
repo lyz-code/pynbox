@@ -78,7 +78,7 @@ deepdiff==5.5.0
     # via
     #   -r requirements.txt
     #   repository-orm
-distlib==0.3.2
+distlib==0.3.3
     # via virtualenv
 distro==1.6.0
     # via ruyaml
@@ -261,7 +261,7 @@ mkdocs-autolinks-plugin==0.4.0
     # via
     #   -r docs/requirements.in
     #   -r docs/requirements.txt
-mkdocs-autorefs==0.2.1
+mkdocs-autorefs==0.3.0
     # via
     #   -r docs/requirements.txt
     #   mkdocstrings
@@ -289,7 +289,7 @@ mkdocs-section-index==0.3.1
     # via
     #   -r docs/requirements.in
     #   -r docs/requirements.txt
-mkdocstrings==0.15.2
+mkdocstrings==0.16.0
     # via
     #   -r docs/requirements.in
     #   -r docs/requirements.txt
@@ -324,7 +324,7 @@ pep8-naming==0.12.1
     # via -r requirements-dev.in
 pexpect==4.8.0
     # via -r requirements-dev.in
-pip-tools==6.2.0
+pip-tools==6.3.0
     # via -r requirements-dev.in
 platformdirs==2.3.0
     # via
@@ -403,14 +403,14 @@ pytest-freezegun==0.4.2
     # via -r requirements-dev.in
 pytest-pythonpath==0.7.3
     # via -r requirements-dev.in
-pytest-xdist==2.3.0
+pytest-xdist==2.4.0
     # via -r requirements-dev.in
 python-dateutil==2.8.2
     # via
     #   -r docs/requirements.txt
     #   freezegun
     #   ghp-import
-pytkdocs==0.11.1
+pytkdocs==0.12.0
     # via
     #   -r docs/requirements.txt
     #   mkdocstrings
@@ -567,7 +567,7 @@ zipp==3.5.0
 # The following packages are considered to be unsafe in a requirements file:
 pip==21.2.4
     # via pip-tools
-setuptools==58.0.4
+setuptools==58.1.0
     # via
     #   astroid
     #   flake8-annotations-complexity
