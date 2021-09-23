@@ -273,7 +273,7 @@ mkdocs-htmlproofer-plugin==0.7.0
     # via
     #   -r docs/requirements.in
     #   -r docs/requirements.txt
-mkdocs-material==7.2.8
+mkdocs-material==7.3.0
     # via
     #   -r docs/requirements.in
     #   -r docs/requirements.txt
@@ -435,7 +435,7 @@ questionary==1.10.0
     # via -r requirements.txt
 regex==2021.8.28
     # via black
-repository-orm==0.5.3
+repository-orm==0.5.4
     # via -r requirements.txt
 requests==2.26.0
     # via
@@ -527,7 +527,7 @@ typing-extensions==3.10.0.2
     #   pytkdocs
     #   rich
     #   tinydb
-urllib3==1.26.6
+urllib3==1.26.7
     # via
     #   -r docs/requirements.txt
     #   flakehell

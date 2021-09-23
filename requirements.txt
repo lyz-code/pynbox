@@ -28,7 +28,7 @@ pypika==0.48.8
     # via repository-orm
 questionary==1.10.0
     # via pynbox (setup.py)
-repository-orm==0.5.3
+repository-orm==0.5.4
     # via pynbox (setup.py)
 rich==10.10.0
     # via pynbox (setup.py)
