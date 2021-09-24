@@ -289,7 +289,7 @@ mkdocs-section-index==0.3.1
     # via
     #   -r docs/requirements.in
     #   -r docs/requirements.txt
-mkdocstrings==0.16.0
+mkdocstrings==0.16.1
     # via
     #   -r docs/requirements.in
     #   -r docs/requirements.txt
@@ -435,7 +435,7 @@ questionary==1.10.0
     # via -r requirements.txt
 regex==2021.8.28
     # via black
-repository-orm==0.5.4
+repository-orm==0.5.5
     # via -r requirements.txt
 requests==2.26.0
     # via
@@ -485,7 +485,7 @@ tabulate==0.8.9
     # via
     #   -r requirements.txt
     #   yoyo-migrations
-tinydb==4.5.1
+tinydb==4.5.2
     # via
     #   -r requirements.txt
     #   repository-orm
