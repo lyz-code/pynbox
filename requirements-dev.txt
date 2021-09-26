@@ -157,7 +157,7 @@ flakehell==0.9.0
     # via -r requirements-dev.in
 freezegun==1.1.0
     # via pytest-freezegun
-ghp-import==2.0.1
+ghp-import==2.0.2
     # via
     #   -r docs/requirements.txt
     #   mkdocs
@@ -326,7 +326,7 @@ pexpect==4.8.0
     # via -r requirements-dev.in
 pip-tools==6.3.0
     # via -r requirements-dev.in
-platformdirs==2.3.0
+platformdirs==2.4.0
     # via
     #   black
     #   pylint
