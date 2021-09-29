@@ -56,5 +56,5 @@ wcwidth==0.2.5
     # via prompt-toolkit
 yoyo-migrations==7.3.2
     # via repository-orm
-zipp==3.5.0
+zipp==3.5.1
     # via importlib-metadata

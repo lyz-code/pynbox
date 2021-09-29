@@ -557,7 +557,7 @@ yoyo-migrations==7.3.2
     # via
     #   -r requirements.txt
     #   repository-orm
-zipp==3.5.0
+zipp==3.5.1
     # via
     #   -r docs/requirements.txt
     #   -r requirements.txt
