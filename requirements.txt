@@ -4,7 +4,7 @@
 #
 #    pip-compile --allow-unsafe
 #
-click==8.0.1
+click==8.0.2
     # via pynbox (setup.py)
 colorama==0.4.4
     # via rich
