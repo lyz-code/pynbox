@@ -57,7 +57,6 @@ mypy:
 	@echo "- Testing mypy -"
 	@echo "----------------"
 
-	mypy src tests
 	poetry run mypy src tests
 
 	@echo ""
