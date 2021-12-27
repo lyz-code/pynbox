@@ -36,15 +36,3 @@ jobs:
         run: make build-docs
       - name: Build the package
         run: make build-package
-  Coveralls:
-    name: Finish Coveralls
-    needs: Tests
-    runs-on: ubuntu-latest
-    container: python:3-slim
-    steps:
-      - name: Finished
-        run: |
-          pip3 install 'coveralls[toml]'
-          coveralls --service=github --finish
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
