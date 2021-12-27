@@ -12,7 +12,7 @@ version_files = [
 # --------- Poetry -------------
 [tool.poetry]
 name = "pynbox"
-version = "0.0.1"
+version = "0.3.1"
 description = "Task management inbox tool"
 authors = ["Lyz <lyz-code-security-advisories@riseup.net>"]
 license = "GPL-3.0-only"
