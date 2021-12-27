@@ -1,141 +1,47 @@
 """Define the configuration of the main program."""
 
-import logging
-import operator
 import os
-from collections import UserDict
-from typing import Any, Dict, List, Union
+from enum import Enum
+from typing import List
 
-from ruamel.yaml import YAML  # type: ignore
-from ruamel.yaml.parser import ParserError
-from ruamel.yaml.scanner import ScannerError
+from goodconf import GoodConf
 
-# It complains that ruamel.yaml doesn't have the object YAML, but it does.
-
-log = logging.getLogger(__name__)
+from .model import ElementType
 
 
-class ConfigError(Exception):
-    """Catch configuration errors."""
+class LogLevel(str, Enum):
+    """Define the possible log levels."""
+
+    DEBUG = "debug"
+    INFO = "info"
+    WARNING = "warning"
+    ERROR = "error"
 
 
-# R0901: UserDict has too many ancestors. Right now I don't feel like switching to
-#   another base class, as `dict` won't work straight ahead.
-# type ignore: I haven't found a way to specify the type of the generic UserDict class.
-class Config(UserDict):  # type: ignore # noqa: R0901
-    """Expose the configuration in a friendly way.
+class Config(GoodConf):  # type: ignore
+    """Configure the frontend."""
 
-    Public methods:
-        get: Fetch the configuration value of the specified key.
-        load: Load the configuration from the configuration YAML file.
-        save: Saves the configuration in the configuration YAML file.
+    # URL specifying the connection to the database. For example:
+    #   * tinydb: tinydb:////home/user/database.tinydb
+    #   * sqlite: sqlite:////home/user/mydb.sqlite
+    #   * mysql: mysql://scott:tiger@localhost/mydatabase
+    database_url: str = "tinydb://~/.local/share/pynbox/database.json"
 
-    Attributes and properties:
-        config_path (str): Path to the configuration file.
-        data(dict): Program configuration.
-    """
+    # Maximum time to process an element. A warning will be shown if it takes you
+    # longer.
+    max_time: int = 120
 
-    def __init__(self, config_path: str = "~/.local/share/pynbox/config.yaml") -> None:
-        """Configure the attributes and load the configuration."""
-        super().__init__()
-        self.config_path = os.path.expanduser(config_path)
-        self.load()
+    # List of element types. Each element can define:
+    #   * regexp: regular expression that identifies it
+    #   * priority: type priority, by default 3.
+    types: List[ElementType] = []
 
-    def get(
-        self, key: str, default: Any = None
-    ) -> Union[str, int, Dict[str, Any], List[Any]]:
-        """Fetch the configuration value of the specified key.
+    log_level: LogLevel = LogLevel.INFO
 
-        If there are nested dictionaries, a dot notation can be used.
+    class Config:
+        """Define the default files to check."""
 
-        So if the configuration contents are:
-
-        self.data = {
-            'first': {
-                'second': 'value'
-            },
-        }
-
-        self.data.get('first.second') == 'value'
-        """
-        original_key = key
-        config_keys = key.split(".")
-        value = self.data.copy()
-
-        for config_key in config_keys:
-            try:
-                value = value[config_key]
-            except KeyError as error:
-                raise ConfigError(
-                    f"Failed to fetch the configuration {config_key} "
-                    f"when searching for {original_key}"
-                ) from error
-
-        return value
-
-    def set(self, key: str, value: Union[str, int]) -> None:
-        """Set the configuration value of the specified key.
-
-        If there are nested dictionaries, a dot notation can be used.
-
-        So if you want to set the configuration:
-
-        self.data = {
-            'first': {
-                'second': 'value'
-            },
-        }
-
-        self.data.set('first.second', 'value')
-        """
-        config_keys: List[str] = key.split(".")
-        last_key = config_keys.pop(-1)
-
-        # Initialize the dictionary structure
-        parent = self.data
-        for config_key in config_keys:
-            try:
-                parent = parent[config_key]
-            except KeyError:
-                parent[config_key] = {}
-                parent = parent[config_key]
-
-        # Set value
-        parent[last_key] = value
-
-    def load(self) -> None:
-        """Load the configuration from the configuration YAML file."""
-        try:
-            with open(os.path.expanduser(self.config_path), "r") as file_cursor:
-                try:
-                    self.data = YAML().load(file_cursor)
-                except (ParserError, ScannerError) as error:
-                    raise ConfigError(str(error)) from error
-        except FileNotFoundError as error:
-            raise FileNotFoundError(
-                "The configuration file {self.config_path} could not be found."
-            ) from error
-
-    def save(self) -> None:
-        """Save the configuration in the configuration YAML file."""
-        with open(os.path.expanduser(self.config_path), "w+") as file_cursor:
-            yaml = YAML()
-            yaml.default_flow_style = False
-            yaml.dump(self.data, file_cursor)
-
-    def types(self) -> List[str]:
-        """Return an ordered list of element types."""
-        types_dict = []
-        for type_name, type_value in self["types"].items():
-            try:
-                types_dict.append(
-                    {"name": type_name, "priority": type_value["priority"]}
-                )
-            except KeyError:
-                types_dict.append({"name": type_name, "priority": 3})
-        return [
-            type_["name"]
-            for type_ in sorted(
-                types_dict, key=operator.itemgetter("priority"), reverse=True
-            )
+        default_files = [
+            os.path.expanduser("~/.local/share/pynbox/config.yaml"),
+            "config.yaml",
         ]

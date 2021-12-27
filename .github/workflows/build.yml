@@ -12,12 +12,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - name: Set up Python 3.7
+      - name: Set up Python
         uses: actions/setup-python@v1
         with:
-          python-version: 3.7
+          python-version: 3.9
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
       - name: Install dependencies
-        run: pip install wheel
+        run: poetry install
       - name: Build package
         run: make build-package
       - name: Publish distribution to Test PyPI
@@ -26,13 +28,8 @@ jobs:
           password: ${{ secrets.test_pypi_password }}
           repository_url: https://test.pypi.org/legacy/
           skip_existing: true
-      - name: Publish distribution to PyPI
-        if: startsWith(github.ref, 'refs/tags')
-        uses: pypa/gh-action-pypi-publish@master
-        with:
-          password: ${{ secrets.pypi_password }}
   Documentation:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -42,11 +39,9 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-python@v2
         with:
-          python-version: 3.7
+          python-version: 3.9
       - name: Install dependencies
-        run: >-
-          pip install -r ./docs/requirements.txt
-          pip install -e .
+        run: poetry install
       - name: Build the Documentation
         run: make build-docs
       - name: Deploy

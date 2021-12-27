@@ -111,11 +111,11 @@ def process(ctx: Context, type_: Optional[str] = None, newest: bool = False) -> 
         ).ask()
         end = time.time()
 
-        if end - start > config["max_time"]:
+        if end - start > config.max_time:
             text = Text.assemble(
                 ("\nWARNING!", "bold red"),
                 " it took you more than ",
-                (str(round(config["max_time"] / 60)), "green"),
+                (str(round(config.max_time / 60)), "green"),
                 " minutes to process the last element: ",
                 (str(round((end - start) / 60)), "red"),
             )
@@ -131,7 +131,7 @@ def process(ctx: Context, type_: Optional[str] = None, newest: bool = False) -> 
         elif choice == "Skip":
             element.skip()
         elif choice == "Change type":
-            types = services.types(config)
+            types = [type_.name for type_ in config.types]
             choice = select(
                 "Select the new type", choices=types, default=element.type_
             ).ask()

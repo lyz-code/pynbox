@@ -21,11 +21,13 @@ from pynbox.version import __version__
 
 log = logging.getLogger(__name__)
 
+CONFIG_PATH = "tests/assets/config.yaml"
+
 
 @pytest.fixture(name="runner")
 def fixture_runner(config: Config) -> CliRunner:
     """Configure the Click cli test runner."""
-    return CliRunner(mix_stderr=False, env={"PYNBOX_CONFIG_PATH": config.config_path})
+    return CliRunner(mix_stderr=False, env={"PYNBOX_CONFIG_PATH": CONFIG_PATH})
 
 
 def test_version(runner: CliRunner) -> None:
@@ -48,23 +50,6 @@ def test_verbose_is_supported(config: Config, runner: CliRunner) -> None:
     result = runner.invoke(cli, ["-v", "null"])
 
     assert result.exit_code == 0
-
-
-def test_creates_config_if_inexistent(config: Config, runner: CliRunner) -> None:
-    """
-    Given: The configuration file doesn't exist
-    When: Any command is used
-    Then: The default configuration is copied.
-    """
-    os.remove(config.config_path)
-
-    result = runner.invoke(cli, ["null"])
-
-    assert result.exit_code == 0
-    assert os.path.isfile(config.config_path)
-    with open(config.config_path, "r") as file_descriptor:
-        config_text = file_descriptor.read()
-    assert "max_time" in config_text
 
 
 def test_load_config_handles_configerror_exceptions(
@@ -105,7 +90,7 @@ def test_parse_stores_elements(
     result = runner.invoke(cli, ["parse", parse_file])
 
     assert result.exit_code == 0
-    repo = load_repository(models=[Element], database_url=config["database_url"])
+    repo = load_repository(models=[Element], database_url=config.database_url)
     elements: List[Element] = repo.all()
     assert len(elements) == 1
     assert elements[0].type_ == "task"
@@ -123,7 +108,7 @@ def test_add_elements(runner: CliRunner, config: Config, tmpdir: LocalPath) -> N
     result = runner.invoke(cli, ["add", "t.", "Task", "title"])
 
     assert result.exit_code == 0
-    repo = load_repository(models=[Element], database_url=config["database_url"])
+    repo = load_repository(models=[Element], database_url=config.database_url)
     elements: List[Element] = repo.all()
     assert len(elements) == 1
     assert elements[0].type_ == "task"
@@ -137,11 +122,11 @@ def test_do_element(config: Config) -> None:
     Then: the element is marked as done and the date is stored
     """
     # Add the element
-    repo = load_repository(models=[Element], database_url=config["database_url"])
+    repo = load_repository(models=[Element], database_url=config.database_url)
     repo.add(Element(type_="task", description="Task title", body="task body"))
     repo.commit()
     # Load the TUI
-    tui = pexpect.spawn(f"pynbox -c {config.config_path} process", timeout=5)
+    tui = pexpect.spawn(f"pynbox -c {CONFIG_PATH} process", timeout=5)
     tui.logfile = sys.stdout.buffer
     tui.expect(".*Quit.*")
 
@@ -160,11 +145,11 @@ def test_delete_element(config: Config) -> None:
     Then: the element is marked as deleted and the date is stored
     """
     # Add the element
-    repo = load_repository(models=[Element], database_url=config["database_url"])
+    repo = load_repository(models=[Element], database_url=config.database_url)
     repo.add(Element(type_="task", description="Task title"))
     repo.commit()
     # Load the TUI
-    tui = pexpect.spawn(f"pynbox -c {config.config_path} process", timeout=5)
+    tui = pexpect.spawn(f"pynbox -c {CONFIG_PATH} process", timeout=5)
     tui.logfile = sys.stdout.buffer
     tui.expect(".*Quit.*")
 
@@ -183,11 +168,11 @@ def test_skip_element(config: Config) -> None:
     Then: the element is skipped and the skipped count is increased
     """
     # Add the element
-    repo = load_repository(models=[Element], database_url=config["database_url"])
+    repo = load_repository(models=[Element], database_url=config.database_url)
     repo.add(Element(type_="task", description="Task title"))
     repo.commit()
     # Load the TUI
-    tui = pexpect.spawn(f"pynbox -c {config.config_path} process", timeout=5)
+    tui = pexpect.spawn(f"pynbox -c {CONFIG_PATH} process", timeout=5)
     tui.logfile = sys.stdout.buffer
     tui.expect(".*Quit.*")
 
@@ -207,11 +192,11 @@ def test_quit(config: Config) -> None:
     Then: the element is not changed and the program ends
     """
     # Add the element
-    repo = load_repository(models=[Element], database_url=config["database_url"])
+    repo = load_repository(models=[Element], database_url=config.database_url)
     repo.add(Element(type_="task", description="Task title"))
     repo.commit()
     # Load the TUI
-    tui = pexpect.spawn(f"pynbox -c {config.config_path} process", timeout=5)
+    tui = pexpect.spawn(f"pynbox -c {CONFIG_PATH} process", timeout=5)
     tui.logfile = sys.stdout.buffer
     tui.expect(".*Quit.*")
 
@@ -233,12 +218,12 @@ def test_process_can_select_subset_of_types(config: Config) -> None:
     will return an error as it will reach the timeout of pexpect.
     """
     # Add the elements
-    repo = load_repository(models=[Element], database_url=config["database_url"])
+    repo = load_repository(models=[Element], database_url=config.database_url)
     repo.add(Element(type_="task", description="Task title"))
     repo.add(Element(type_="idea", description="Idea title"))
     repo.commit()
     # Load the TUI
-    tui = pexpect.spawn(f"pynbox -c {config.config_path} process idea", timeout=5)
+    tui = pexpect.spawn(f"pynbox -c {CONFIG_PATH} process idea", timeout=5)
     tui.logfile = sys.stdout.buffer
     tui.expect(".*Quit.*")
 
@@ -261,14 +246,13 @@ def test_process_shows_warning_if_max_time_surpassed(
     Then: A warning is shown in the terminal.
     """
     # Configure the max_time to 0 so the warning is always raised
-    config["max_time"] = 0
-    config.save()
+    os.environ["max_time"] = "0"
     # Add the elements
-    repo = load_repository(models=[Element], database_url=config["database_url"])
+    repo = load_repository(models=[Element], database_url=config.database_url)
     repo.add(Element(type_="task", description="Task title"))
     repo.commit()
     # Load the TUI
-    tui = pexpect.spawn(f"pynbox -c {config.config_path} process", timeout=5)
+    tui = pexpect.spawn(f"pynbox -c {CONFIG_PATH} process", timeout=5)
     tui.logfile = sys.stdout.buffer
     tui.expect(".*Quit.*")
 
@@ -294,12 +278,12 @@ def test_process_shows_a_report_of_the_status_of_the_inbox(
     Then: A report of the state of the inbox is shown.
     """
     # Add the elements
-    repo = load_repository(models=[Element], database_url=config["database_url"])
+    repo = load_repository(models=[Element], database_url=config.database_url)
     repo.add(Element(type_="task", description="Task title"))
     repo.add(Element(type_="task", description="Task title 2"))
     repo.commit()
     # Load the TUI
-    tui = pexpect.spawn(f"pynbox -c {config.config_path} process", timeout=5)
+    tui = pexpect.spawn(f"pynbox -c {CONFIG_PATH} process", timeout=5)
     tui.logfile = sys.stdout.buffer
     tui.expect(".*Quit.*")
     tui.sendline("d")
@@ -327,7 +311,7 @@ def test_status_returns_the_pending_element_numbers_by_type(
     Then: A list of types with the number of pending elements are returned
     """
     # Add the elements
-    repo = load_repository(models=[Element], database_url=config["database_url"])
+    repo = load_repository(models=[Element], database_url=config.database_url)
     repo.add(Element(type_="idea", description="Idea title"))
     repo.add(Element(type_="task", description="Task title"))
     repo.add(Element(type_="task", description="Task title 2"))
@@ -353,12 +337,12 @@ def test_process_can_select_newest_order(config: Config) -> None:
     will return an error as it will reach the timeout of pexpect.
     """
     # Add the elements
-    repo = load_repository(models=[Element], database_url=config["database_url"])
+    repo = load_repository(models=[Element], database_url=config.database_url)
     repo.add(Element(type_="task", description="Old task"))
     repo.add(Element(type_="task", description="New task"))
     repo.commit()
     # Load the TUI
-    tui = pexpect.spawn(f"pynbox -c {config.config_path} process -n", timeout=5)
+    tui = pexpect.spawn(f"pynbox -c {CONFIG_PATH} process -n", timeout=5)
     tui.logfile = sys.stdout.buffer
     tui.expect(".*Quit.*")
 
@@ -379,11 +363,11 @@ def test_change_element_type(config: Config) -> None:
     Then: the element type is changed
     """
     # Add the element
-    repo = load_repository(models=[Element], database_url=config["database_url"])
+    repo = load_repository(models=[Element], database_url=config.database_url)
     repo.add(Element(type_="task", description="Idea title"))
     repo.commit()
     # Load the TUI
-    tui = pexpect.spawn(f"pynbox -c {config.config_path} process", timeout=5)
+    tui = pexpect.spawn(f"pynbox -c {CONFIG_PATH} process", timeout=5)
     tui.logfile = sys.stdout.buffer
     tui.expect(".*Quit.*")
 

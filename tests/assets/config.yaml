@@ -1,8 +1,8 @@
 ---
-max_time: 120
+database_url: fake://
 types:
-  task:
+  - name: task
     regexp: t\.
     priority: 4
-  idea:
+  - name: idea
     regexp: i\.

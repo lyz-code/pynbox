@@ -5,16 +5,12 @@ Functions:
 """
 
 import logging
-import os
 import sys
-from contextlib import suppress
-from shutil import copyfile
 
-import pkg_resources
 from repository_orm import Repository, load_repository
+from ruamel.yaml.parser import ParserError
 
-from pynbox.config import Config, ConfigError
-
+from ..config import Config
 from ..model import Element
 
 log = logging.getLogger(__name__)
@@ -23,32 +19,21 @@ log = logging.getLogger(__name__)
 def load_config(config_path: str) -> Config:
     """Load the configuration from the file."""
     log.debug(f"Loading the configuration from file {config_path}")
-    config_path = os.path.expanduser(config_path)
+    config = Config()
 
-    with suppress(FileExistsError):
-        data_directory = os.path.expanduser("~/.local/share/pynbox")
-        os.makedirs(data_directory)
-        log.debug("Data directory created")  # pragma: no cover
+    try:
+        config.load(config_path)
+    except ParserError as error:
+        log.error(f"Configuration Error: {str(error)}")
+        sys.exit(1)
 
-    while True:
-        try:
-            return Config(config_path)
-        except ConfigError as error:
-            log.error(f"Configuration Error: {str(error)}")
-            sys.exit(1)
-        except FileNotFoundError:
-            log.info(f"Error opening configuration file {config_path}")
-            copyfile(
-                pkg_resources.resource_filename("pynbox", "assets/config.yaml"),
-                config_path,
-            )
-            log.info("Copied default configuration template")
+    return config
 
 
-def get_repo(config: Config) -> Repository:
+def get_repo(config: "Config") -> Repository:
     """Configure the repository."""
     log.debug("Initializing repository")
-    repo = load_repository(models=[Element], database_url=config["database_url"])
+    repo = load_repository(models=[Element], database_url=config.database_url)
 
     return repo
 

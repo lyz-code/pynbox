@@ -1,4 +1,4 @@
-"""Gather all the orchestration functionality required by the program to work.
+"""Define all the orchestration functionality required by the program to work.
 
 Classes and functions that connect the different domain model objects with the adapters
 and handlers to achieve the program's purpose.
@@ -33,8 +33,8 @@ def parse(config: Config, text: str) -> List[Element]:
     element = None
 
     type_regexps = {
-        key: re.compile(rf"^{value['regexp']} ?(.*)", re.IGNORECASE)
-        for key, value in config["types"].items()
+        type_.name: re.compile(rf"^{type_.regexp} ?(.*)", re.IGNORECASE)
+        for type_ in config.types
     }
     priority_regexp = re.compile(r"\s([h])(?:\s|$)", re.IGNORECASE)
 
@@ -116,7 +116,7 @@ def elements(
         Ordered list of elements to process.
     """
     if type_ is None:
-        types = config.types()
+        types = [type_.name for type_ in config.types]
     else:
         types = [type_]
 
@@ -147,21 +147,9 @@ def status(repo: Repository, config: Config) -> Dict[str, int]:
         Number of open tasks per type
     """
     status = {}
-    for type_ in config.types():
+    for type_ in config.types:
         with suppress(EntityNotFoundError):
-            elements = len(repo.search({"state": "open", "type_": type_}, Element))
+            elements = len(repo.search({"state": "open", "type_": type_.name}, Element))
             if elements > 0:
-                status[type_] = elements
+                status[type_.name] = elements
     return status
-
-
-def types(config: Config) -> List[str]:
-    """Get an ordered list of the types of elements from the config file.
-
-    Args:
-        config: Configuration object
-
-    Returns:
-        Ordered list of element types.
-    """
-    return list(config["types"].keys())
