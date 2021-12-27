@@ -4,8 +4,17 @@ from datetime import datetime
 from enum import Enum
 from typing import Optional
 
+from pydantic import BaseModel  # noqa: E0611
 from pydantic import Field
 from repository_orm import Entity
+
+
+class ElementType(BaseModel):
+    """Define the configuration attributes of the element types."""
+
+    name: str
+    regexp: str
+    priority: int = 3
 
 
 class ElementState(str, Enum):
