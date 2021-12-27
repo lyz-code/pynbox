@@ -48,7 +48,7 @@ def load_config(config_path: str) -> Config:
 def get_repo(config: Config) -> Repository:
     """Configure the repository."""
     log.debug("Initializing repository")
-    repo = load_repository([Element], config["database_url"])
+    repo = load_repository(models=[Element], database_url=config["database_url"])
 
     return repo
 
