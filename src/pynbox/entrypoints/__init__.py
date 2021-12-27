@@ -5,6 +5,7 @@ Functions:
 """
 
 import logging
+import os
 import sys
 
 from repository_orm import Repository, load_repository
@@ -22,7 +23,7 @@ def load_config(config_path: str) -> Config:
     config = Config()
 
     try:
-        config.load(config_path)
+        config.load(os.path.expanduser(config_path))
     except ParserError as error:
         log.error(f"Configuration Error: {str(error)}")
         sys.exit(1)
