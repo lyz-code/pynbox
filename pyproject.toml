@@ -2,7 +2,7 @@
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "0.3.1"
+version = "0.3.2"
 tag_format = "$version"
 version_files = [
     "pyproject.toml:version",
@@ -12,7 +12,7 @@ version_files = [
 # --------- Poetry -------------
 [tool.poetry]
 name = "pynbox"
-version = "0.3.1"
+version = "0.3.2"
 description = "Task management inbox tool"
 authors = ["Lyz <lyz-code-security-advisories@riseup.net>"]
 license = "GPL-3.0-only"
