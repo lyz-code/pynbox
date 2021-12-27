@@ -32,14 +32,6 @@ jobs:
         run: make security
       - name: Test with pytest
         run: make test
-      - name: Upload Coverage
-        run: |
-          pip3 install 'coveralls[toml]'
-          coveralls --service=github
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          COVERALLS_FLAG_NAME: ${{ matrix.test-name }}
-          COVERALLS_PARALLEL: true
       - name: Test documentation
         run: make build-docs
       - name: Build the package
