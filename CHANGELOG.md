@@ -1,3 +1,13 @@
+## 0.3.1 (2021-12-27)
+
+### Refactor
+
+- use poetry instead of pip-tools
+
+### refactor
+
+- migrate configuration to goodconf
+
 ## 0.3.0 (2021-08-19)
 
 ### Feat
