@@ -1487,7 +1487,7 @@ docs = ["Sphinx (>=3.3,<4.0)", "sphinx-rtd-theme (>=0.5.0,<0.6.0)", "sphinx-auto
 
 [[package]]
 name = "repository-orm"
-version = "0.7.0"
+version = "0.9.0"
 description = "Library to ease the implementation of the repository pattern in Python projects."
 category = "main"
 optional = false
@@ -1845,7 +1845,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7, <=3.10"
-content-hash = "3742bc3d82ba99c99bccc239630d99953d67b3a1c17943b3ae153600a8af9177"
+content-hash = "483289b0f50ca6cab9515cffae7a6f93aa26a9edabd4701fe7799933fb84eb6a"
 
 [metadata.files]
 astor = [
@@ -2617,8 +2617,8 @@ questionary = [
     {file = "questionary-1.10.0.tar.gz", hash = "sha256:600d3aefecce26d48d97eee936fdb66e4bc27f934c3ab6dd1e292c4f43946d90"},
 ]
 repository-orm = [
-    {file = "repository-orm-0.7.0.tar.gz", hash = "sha256:3f5a32f78a8d029e5a7a5c28446b81ec5f5417f3cf06e3d9ac49e6016072ace9"},
-    {file = "repository_orm-0.7.0-py3-none-any.whl", hash = "sha256:cecda5bc8fe6523fe827a7b0791bcb4cfa798bf83745cdb15768e40f6ab2c84f"},
+    {file = "repository-orm-0.9.0.tar.gz", hash = "sha256:107fead56ee5e5c7a0179f98f2c8b318ce2fd4deeedd5aea8ef8044931d8ebf6"},
+    {file = "repository_orm-0.9.0-py3-none-any.whl", hash = "sha256:789bdaba5cfa723389576cf9c656d3f40c39eaba108945d3f660b3f7df794315"},
 ]
 requests = [
     {file = "requests-2.26.0-py2.py3-none-any.whl", hash = "sha256:6c1246513ecd5ecd4528a0906f910e8f0f9c6b8ec72030dc9fd154dc1a6efd24"},
