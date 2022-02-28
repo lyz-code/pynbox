@@ -92,7 +92,7 @@ flake8 = "^3.9.2"
 
 # Security
 safety = "^1.10.3"
-bandit = "^1.7.1"
+bandit = "^1.7.3"
 
 # Type checkers
 mypy = "^0.910"
