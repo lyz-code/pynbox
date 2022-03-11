@@ -1,12 +1,11 @@
 .DEFAULT_GOAL := test
-flakehell = poetry run flakehell lint src/ tests/
-isort = poetry run isort src tests
-black = poetry run black --target-version py37 src tests
+isort = pdm run isort src tests
+black = pdm run black --target-version py39 src tests
 
 .PHONY: install
 install:
-	poetry install --remove-untracked
-	pre-commit install
+	pdm install --dev
+	pdm run pre-commit install
 
 .PHONY: update
 update:
@@ -14,17 +13,8 @@ update:
 	@echo "- Updating dependencies -"
 	@echo "-------------------------"
 
-	poetry update
-
-	@echo ""
-
-.PHONY: upgrade
-upgrade:
-	@echo "-------------------------"
-	@echo "- Upgrading dependencies -"
-	@echo "-------------------------"
-
-	poetryup
+	pdm update --no-sync
+	pdm sync --clean
 
 	@echo ""
 
@@ -45,7 +35,7 @@ lint:
 	@echo "- Testing the lint -"
 	@echo "--------------------"
 
-	$(flakehell)
+	pdm run flakeheaven lint src/ tests/
 	$(isort) --check-only --df
 	$(black) --check --diff
 
@@ -57,12 +47,12 @@ mypy:
 	@echo "- Testing mypy -"
 	@echo "----------------"
 
-	poetry run mypy src tests
+	pdm run mypy src tests
 
 	@echo ""
 
 .PHONY: test
-test: test-code
+test: test-code test-examples
 
 .PHONY: test-code
 test-code:
@@ -70,7 +60,7 @@ test-code:
 	@echo "- Testing code -"
 	@echo "----------------"
 
-	poetry run pytest --cov-report term-missing --cov src tests ${ARGS}
+	pdm run pytest --cov-report term-missing --cov src tests ${ARGS}
 
 	@echo ""
 
@@ -80,7 +70,10 @@ test-examples:
 	@echo "- Testing examples -"
 	@echo "--------------------"
 
-	@find docs/examples -type f -name '*.py' | xargs -I'{}' sh -c 'python {} >/dev/null 2>&1 || (echo "{} failed" ; exit 1)'
+	@find docs/examples -type f -name '*.py' | xargs -I'{}' sh -c 'echo {}; pdm run python {} >/dev/null 2>&1 || (echo "{} failed" ; exit 1)'
+	@echo ""
+
+	# pdm run pytest docs/examples/*
 
 	@echo ""
 
@@ -117,12 +110,12 @@ clean:
 	@echo ""
 
 .PHONY: docs
-docs:
+docs: test-examples
 	@echo "-------------------------"
 	@echo "- Serving documentation -"
 	@echo "-------------------------"
 
-	poetry run mkdocs serve
+	pdm run mkdocs serve
 
 	@echo ""
 
@@ -146,7 +139,7 @@ build-package: clean
 	@echo "- Building the package -"
 	@echo "------------------------"
 
-	poetry build
+	pdm build
 
 	@echo ""
 
@@ -156,7 +149,7 @@ build-docs:
 	@echo "- Building documentation -"
 	@echo "--------------------------"
 
-	poetry run mkdocs build
+	pdm run mkdocs build
 
 	@echo ""
 
@@ -166,17 +159,7 @@ upload-pypi:
 	@echo "- Uploading package to pypi -"
 	@echo "-----------------------------"
 
-	poetry publish
-
-	@echo ""
-
-.PHONY: upload-testing-pypi
-upload-testing-pypi:
-	@echo "-------------------------------------"
-	@echo "- Uploading package to pypi testing -"
-	@echo "-------------------------------------"
-
-	poetry publish -r test-pypi
+	twine upload -r pypi dist/*
 
 	@echo ""
 
@@ -186,7 +169,7 @@ bump-version:
 	@echo "- Bumping program version -"
 	@echo "---------------------------"
 
-	poetry run cz bump --changelog --no-verify
+	pdm run cz bump --changelog --no-verify
 	git push
 	git push --tags
 
@@ -198,9 +181,9 @@ security:
 	@echo "- Testing security -"
 	@echo "--------------------"
 
-	poetry run safety check
+	pdm run safety check
 	@echo ""
-	poetry run bandit -r src
+	pdm run bandit -r src
 
 	@echo ""
 
