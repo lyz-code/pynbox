@@ -1,3 +1,9 @@
+## 0.4.0 (2022-03-11)
+
+### Feat
+
+- use pdm as package manager
+
 ## 0.3.2 (2021-12-27)
 
 ### Fix
