@@ -1,13 +1,13 @@
 """Store the classes and fixtures used throughout the tests."""
 
 import os
+from typing import Generator
 
 import pytest
 from py._path.local import LocalPath
 from repository_orm import FakeRepository
 
 from pynbox.config import Config
-from pynbox.model import Element
 
 
 @pytest.fixture(name="config")
@@ -23,6 +23,10 @@ def fixture_config(tmpdir: LocalPath) -> Config:
 
 
 @pytest.fixture(name="repo")
-def repo_() -> FakeRepository:
+def repo_() -> Generator[FakeRepository, None, None]:
     """Configure a FakeRepository instance."""
-    return FakeRepository([Element])
+    repo = FakeRepository(search_exception=False)
+
+    yield repo
+
+    repo.close()

@@ -12,7 +12,6 @@ from repository_orm import Repository, load_repository
 from ruamel.yaml.parser import ParserError
 
 from ..config import Config
-from ..model import Element
 
 log = logging.getLogger(__name__)
 
@@ -34,7 +33,7 @@ def load_config(config_path: str) -> Config:
 def get_repo(config: "Config") -> Repository:
     """Configure the repository."""
     log.debug("Initializing repository")
-    repo = load_repository(models=[Element], database_url=config.database_url)
+    repo = load_repository(database_url=config.database_url, search_exception=False)
 
     return repo
 

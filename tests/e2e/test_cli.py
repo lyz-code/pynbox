@@ -4,7 +4,7 @@ import logging
 import os
 import re
 import sys
-from typing import Any, List
+from typing import Any, Generator
 
 import pexpect
 import pytest
@@ -12,7 +12,7 @@ from _pytest.capture import CaptureFixture
 from _pytest.logging import LogCaptureFixture
 from click.testing import CliRunner
 from py._path.local import LocalPath
-from repository_orm import load_repository
+from repository_orm import Repository, load_repository
 
 from pynbox.config import Config
 from pynbox.entrypoints.cli import cli
@@ -30,13 +30,23 @@ def fixture_runner(config: Config) -> CliRunner:
     return CliRunner(mix_stderr=False, env={"PYNBOX_CONFIG_PATH": CONFIG_PATH})
 
 
+@pytest.fixture(name="repo")
+def repo_(config: Config) -> Generator[Repository, None, None]:
+    """Configure a FakeRepository instance."""
+    repo = load_repository(database_url=config.database_url, search_exception=False)
+
+    yield repo
+
+    repo.close()
+
+
 def test_version(runner: CliRunner) -> None:
     """Prints program version when called with --version."""
     result = runner.invoke(cli, ["--version"])
 
     assert result.exit_code == 0
     assert re.match(
-        fr" *pynbox version: {__version__}\n" r" *python version: .*\n *platform: .*",
+        rf" *pynbox version: {__version__}\n" r" *python version: .*\n *platform: .*",
         result.stdout,
     )
 
@@ -76,7 +86,7 @@ def test_load_config_handles_configerror_exceptions(
 
 
 def test_parse_stores_elements(
-    runner: CliRunner, config: Config, tmpdir: LocalPath
+    runner: CliRunner, config: Config, tmpdir: LocalPath, repo: Repository
 ) -> None:
     """
     Given: A configured program and a file to parse
@@ -84,22 +94,23 @@ def test_parse_stores_elements(
     Then: the element is stored in the repository, and the file is pruned
     """
     parse_file = f"{tmpdir}/parse.pynbox"
-    with open(parse_file, "w+") as file_descriptor:
+    with open(parse_file, "w+", encoding="utf-8") as file_descriptor:
         file_descriptor.write("t. Task title")
 
     result = runner.invoke(cli, ["parse", parse_file])
 
     assert result.exit_code == 0
-    repo = load_repository(models=[Element], database_url=config.database_url)
-    elements: List[Element] = repo.all()
+    elements = repo.all(Element)
     assert len(elements) == 1
     assert elements[0].type_ == "task"
     assert elements[0].description == "Task title"
-    with open(parse_file, "r") as file_descriptor:
+    with open(parse_file, "r", encoding="utf-8") as file_descriptor:
         assert file_descriptor.read() == ""
 
 
-def test_add_elements(runner: CliRunner, config: Config, tmpdir: LocalPath) -> None:
+def test_add_elements(
+    runner: CliRunner, config: Config, tmpdir: LocalPath, repo: Repository
+) -> None:
     """
     Given: A configured program
     When: add command is used
@@ -108,21 +119,19 @@ def test_add_elements(runner: CliRunner, config: Config, tmpdir: LocalPath) -> N
     result = runner.invoke(cli, ["add", "t.", "Task", "title"])
 
     assert result.exit_code == 0
-    repo = load_repository(models=[Element], database_url=config.database_url)
-    elements: List[Element] = repo.all()
+    elements = repo.all(Element)
     assert len(elements) == 1
     assert elements[0].type_ == "task"
     assert elements[0].description == "Task title"
 
 
-def test_do_element(config: Config) -> None:
+def test_do_element(config: Config, repo: Repository) -> None:
     """
     Given: An element in the repository
     When: the inbox processing command is used and the done key is pressed
     Then: the element is marked as done and the date is stored
     """
     # Add the element
-    repo = load_repository(models=[Element], database_url=config.database_url)
     repo.add(Element(type_="task", description="Task title", body="task body"))
     repo.commit()
     # Load the TUI
@@ -138,14 +147,13 @@ def test_do_element(config: Config) -> None:
     assert element.closed is not None
 
 
-def test_delete_element(config: Config) -> None:
+def test_delete_element(config: Config, repo: Repository) -> None:
     """
     Given: An element in the repository
     When: the inbox processing command is used and the delete key is pressed
     Then: the element is marked as deleted and the date is stored
     """
     # Add the element
-    repo = load_repository(models=[Element], database_url=config.database_url)
     repo.add(Element(type_="task", description="Task title"))
     repo.commit()
     # Load the TUI
@@ -161,14 +169,13 @@ def test_delete_element(config: Config) -> None:
     assert element.closed is not None
 
 
-def test_skip_element(config: Config) -> None:
+def test_skip_element(config: Config, repo: Repository) -> None:
     """
     Given: An element in the repository
     When: the inbox processing command is used and the skip key is pressed
     Then: the element is skipped and the skipped count is increased
     """
     # Add the element
-    repo = load_repository(models=[Element], database_url=config.database_url)
     repo.add(Element(type_="task", description="Task title"))
     repo.commit()
     # Load the TUI
@@ -185,14 +192,13 @@ def test_skip_element(config: Config) -> None:
     assert element.closed is None
 
 
-def test_quit(config: Config) -> None:
+def test_quit(config: Config, repo: Repository) -> None:
     """
     Given: An element in the repository
     When: the inbox processing command is used and the quit key is pressed
     Then: the element is not changed and the program ends
     """
     # Add the element
-    repo = load_repository(models=[Element], database_url=config.database_url)
     repo.add(Element(type_="task", description="Task title"))
     repo.commit()
     # Load the TUI
@@ -208,7 +214,7 @@ def test_quit(config: Config) -> None:
     assert element.closed is None
 
 
-def test_process_can_select_subset_of_types(config: Config) -> None:
+def test_process_can_select_subset_of_types(config: Config, repo: Repository) -> None:
     """
     Given: Two elements with different types in the repository
     When: the inbox processing command is used specifying the type
@@ -218,7 +224,6 @@ def test_process_can_select_subset_of_types(config: Config) -> None:
     will return an error as it will reach the timeout of pexpect.
     """
     # Add the elements
-    repo = load_repository(models=[Element], database_url=config.database_url)
     repo.add(Element(type_="task", description="Task title"))
     repo.add(Element(type_="idea", description="Idea title"))
     repo.commit()
@@ -237,7 +242,7 @@ def test_process_can_select_subset_of_types(config: Config) -> None:
 
 
 def test_process_shows_warning_if_max_time_surpassed(
-    config: Config, capsys: CaptureFixture[Any]
+    config: Config, capsys: CaptureFixture[Any], repo: Repository
 ) -> None:
     """
     Given: An element in the repository
@@ -248,7 +253,6 @@ def test_process_shows_warning_if_max_time_surpassed(
     # Configure the max_time to 0 so the warning is always raised
     os.environ["max_time"] = "0"
     # Add the elements
-    repo = load_repository(models=[Element], database_url=config.database_url)
     repo.add(Element(type_="task", description="Task title"))
     repo.commit()
     # Load the TUI
@@ -260,6 +264,7 @@ def test_process_shows_warning_if_max_time_surpassed(
 
     tui.expect_exact(pexpect.EOF)
     out, err = capsys.readouterr()
+    assert err == ""
     assert re.search(
         (
             "WARNING!.* it took you more than .*0.* minutes "
@@ -270,7 +275,7 @@ def test_process_shows_warning_if_max_time_surpassed(
 
 
 def test_process_shows_a_report_of_the_status_of_the_inbox(
-    config: Config, capsys: CaptureFixture[Any]
+    config: Config, capsys: CaptureFixture[Any], repo: Repository
 ) -> None:
     """
     Given: Two elements in the repository
@@ -278,7 +283,6 @@ def test_process_shows_a_report_of_the_status_of_the_inbox(
     Then: A report of the state of the inbox is shown.
     """
     # Add the elements
-    repo = load_repository(models=[Element], database_url=config.database_url)
     repo.add(Element(type_="task", description="Task title"))
     repo.add(Element(type_="task", description="Task title 2"))
     repo.commit()
@@ -293,6 +297,7 @@ def test_process_shows_a_report_of_the_status_of_the_inbox(
     tui.expect_exact(pexpect.EOF)
     out, err = capsys.readouterr()
     assert "" in out
+    assert err == ""
     assert re.search(
         (
             "It took you .*0.* minutes to process .*1.* elements. "
@@ -303,7 +308,7 @@ def test_process_shows_a_report_of_the_status_of_the_inbox(
 
 
 def test_status_returns_the_pending_element_numbers_by_type(
-    runner: CliRunner, config: Config
+    runner: CliRunner, config: Config, repo: Repository
 ) -> None:
     """
     Given: Three elements in the repository
@@ -311,7 +316,6 @@ def test_status_returns_the_pending_element_numbers_by_type(
     Then: A list of types with the number of pending elements are returned
     """
     # Add the elements
-    repo = load_repository(models=[Element], database_url=config.database_url)
     repo.add(Element(type_="idea", description="Idea title"))
     repo.add(Element(type_="task", description="Task title"))
     repo.add(Element(type_="task", description="Task title 2"))
@@ -326,7 +330,7 @@ def test_status_returns_the_pending_element_numbers_by_type(
     )
 
 
-def test_process_can_select_newest_order(config: Config) -> None:
+def test_process_can_select_newest_order(config: Config, repo: Repository) -> None:
     """
     Given: Two elements in the repository
     When: the inbox processing command is used specifying the newest flag, the first
@@ -337,7 +341,6 @@ def test_process_can_select_newest_order(config: Config) -> None:
     will return an error as it will reach the timeout of pexpect.
     """
     # Add the elements
-    repo = load_repository(models=[Element], database_url=config.database_url)
     repo.add(Element(type_="task", description="Old task"))
     repo.add(Element(type_="task", description="New task"))
     repo.commit()
@@ -356,14 +359,13 @@ def test_process_can_select_newest_order(config: Config) -> None:
     assert new.state == ElementState.CLOSED
 
 
-def test_change_element_type(config: Config) -> None:
+def test_change_element_type(config: Config, repo: Repository) -> None:
     """
     Given: An element in the repository
     When: the inbox processing command is used and the change key is pressed
     Then: the element type is changed
     """
     # Add the element
-    repo = load_repository(models=[Element], database_url=config.database_url)
     repo.add(Element(type_="task", description="Idea title"))
     repo.commit()
     # Load the TUI

@@ -1,7 +1,7 @@
 {
   "template": "https://github.com/lyz-code/cookiecutter-python-project",
-  "commit": "3e344547a9bb3d1719f3f88206fdcd2291b586c6",
-  "checkout": "3e34454",
+  "commit": "bcd6dcee41eb8d74c5134cf24e5a74256eba8c4c",
+  "checkout": null,
   "context": {
     "cookiecutter": {
       "project_name": "pynbox",
