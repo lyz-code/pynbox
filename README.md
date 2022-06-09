@@ -2,7 +2,7 @@
 
 [![Actions Status](https://github.com/lyz-code/pynbox/workflows/Tests/badge.svg)](https://github.com/lyz-code/pynbox/actions)
 [![Actions Status](https://github.com/lyz-code/pynbox/workflows/Build/badge.svg)](https://github.com/lyz-code/pynbox/actions)
-[![Coverage Status](https://coveralls.io/repos/github/lyz-code/pynbox/badge.svg?branch=master)](https://coveralls.io/github/lyz-code/pynbox?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/lyz-code/pynbox/badge.svg?branch=main)](https://coveralls.io/github/lyz-code/pynbox?branch=main)
 
 Task management inbox tool
 

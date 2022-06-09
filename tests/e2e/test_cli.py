@@ -33,7 +33,7 @@ def fixture_runner(config: Config) -> CliRunner:
 @pytest.fixture(name="repo")
 def repo_(config: Config) -> Generator[Repository, None, None]:
     """Configure a FakeRepository instance."""
-    repo = load_repository(database_url=config.database_url, search_exception=False)
+    repo = load_repository(database_url=config.database_url)
 
     yield repo
 
@@ -45,8 +45,8 @@ def test_version(runner: CliRunner) -> None:
     result = runner.invoke(cli, ["--version"])
 
     assert result.exit_code == 0
-    assert re.match(
-        rf" *pynbox version: {__version__}\n" r" *python version: .*\n *platform: .*",
+    assert re.search(
+        rf" *pynbox: {__version__}\n *Python: .*\n *Platform: .*",
         result.stdout,
     )
 
