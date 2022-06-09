@@ -25,7 +25,7 @@ def fixture_config(tmpdir: LocalPath) -> Config:
 @pytest.fixture(name="repo")
 def repo_() -> Generator[FakeRepository, None, None]:
     """Configure a FakeRepository instance."""
-    repo = FakeRepository(search_exception=False)
+    repo = FakeRepository()
 
     yield repo
 

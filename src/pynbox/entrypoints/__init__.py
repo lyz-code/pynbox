@@ -33,7 +33,7 @@ def load_config(config_path: str) -> Config:
 def get_repo(config: "Config") -> Repository:
     """Configure the repository."""
     log.debug("Initializing repository")
-    repo = load_repository(database_url=config.database_url, search_exception=False)
+    repo = load_repository(database_url=config.database_url)
 
     return repo
 
