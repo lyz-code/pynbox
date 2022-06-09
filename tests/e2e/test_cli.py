@@ -46,7 +46,7 @@ def test_version(runner: CliRunner) -> None:
 
     assert result.exit_code == 0
     assert re.match(
-        rf" *pynbox version: {__version__}\n" r" *python version: .*\n *platform: .*",
+        rf" *pynbox: {__version__}\n *Python: .*\n *Platform: .*",
         result.stdout,
     )
 

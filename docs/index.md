@@ -1,6 +1,6 @@
 [![Actions Status](https://github.com/lyz-code/pynbox/workflows/Tests/badge.svg)](https://github.com/lyz-code/pynbox/actions)
 [![Actions Status](https://github.com/lyz-code/pynbox/workflows/Build/badge.svg)](https://github.com/lyz-code/pynbox/actions)
-[![Coverage Status](https://coveralls.io/repos/github/lyz-code/pynbox/badge.svg?branch=master)](https://coveralls.io/github/lyz-code/pynbox?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/lyz-code/pynbox/badge.svg?branch=main)](https://coveralls.io/github/lyz-code/pynbox?branch=main)
 
 `pynbox` aims to help you with the daily [emptying of the
 inbox](https://lyz-code.github.io/blue-book/task_tools/#inbox) by:
@@ -52,13 +52,13 @@ giants, namely:
 [Black](https://black.readthedocs.io/en/stable/)
 : Python formatter to keep a nice style without effort.
 
-[Autoimport](https://github.com/lyz-code/autoimport)
+[Autoimport](https://lyz-code.github.io/autoimport)
 : Python formatter to automatically fix wrong import statements.
 
 [isort](https://github.com/timothycrosley/isort)
 : Python formatter to order the import statements.
 
-[Pip-tools](https://github.com/jazzband/pip-tools)
+[PDM](https://pdm.fming.dev/)
 : Command line tool to manage the dependencies.
 
 [Mkdocs](https://www.mkdocs.org/)
