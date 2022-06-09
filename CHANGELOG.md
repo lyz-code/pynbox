@@ -1,3 +1,9 @@
+## 0.4.1 (2022-06-09)
+
+### Fix
+
+- remove search_exception from repository_orm
+
 ## 0.4.0 (2022-03-11)
 
 ### Feat
