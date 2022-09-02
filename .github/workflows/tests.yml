@@ -39,7 +39,7 @@ jobs:
       - name: Test security
         run: make security
       - name: Test with pytest
-        run: make test
+        run: ARGS='-m "not skip_ci"' make test
       - name: Upload Coverage
         run: |
           pip3 install 'coveralls[toml]'

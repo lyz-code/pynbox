@@ -3,7 +3,9 @@
 import logging
 import os
 import re
+import subprocess
 import sys
+import time
 from typing import Any, Generator
 
 import pexpect
@@ -373,7 +375,7 @@ def test_change_element_type(config: Config, repo: Repository) -> None:
     tui.logfile = sys.stdout.buffer
     tui.expect(".*Quit.*")
 
-    tui.sendline("c")  # act
+    tui.sendline("t")  # act
 
     tui.expect(".*Select the new type.*")
     tui.sendline("j")
@@ -383,3 +385,34 @@ def test_change_element_type(config: Config, repo: Repository) -> None:
     assert element.state == ElementState.OPEN
     assert element.skips == 0
     assert element.closed is None
+
+
+# It doesn't have an X server so the test fails
+@pytest.mark.skip_ci()
+def test_copy_text_to_clipboard(config: Config, repo: Repository) -> None:
+    """
+    Given: An element in the repository
+    When: the inbox processing command is used and the copy key is pressed
+        Then we use q to quit the program
+    Then: The element text is copied to the clipboard
+    """
+    # Add the element
+    repo.add(Element(type_="task", description="Task title"))
+    repo.commit()
+    # Load the TUI
+    tui = pexpect.spawn(f"pynbox -c {CONFIG_PATH} process", timeout=5)
+    tui.logfile = sys.stdout.buffer
+    tui.expect(".*Quit.*")
+
+    tui.sendline("c")  # act
+
+    # We need to wait so it has time to copy it
+    time.sleep(2)
+    assert (
+        subprocess.check_output(["xclip", "-o", "-selection", "clipboard"]).decode(
+            "utf-8"
+        )
+        == "Task title"
+    )
+    tui.sendline("q")
+    tui.expect_exact(pexpect.EOF)

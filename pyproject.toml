@@ -184,7 +184,8 @@ norecursedirs = [
 ]
 markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
-    "secondary: mark tests that use functionality tested in the same file (deselect with '-m \"not secondary\"')"
+    "secondary: mark tests that use functionality tested in the same file (deselect with '-m \"not secondary\"')",
+    "skip_ci: Tests that can't run in the CI",
 ]
 filterwarnings = [
   "error",
