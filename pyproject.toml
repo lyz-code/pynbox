@@ -60,6 +60,9 @@ documentation = "https://lyz-code.github.io/pynbox"
 pynbox = "pynbox.entrypoints.cli:cli"
 
 [project.optional-dependencies]
+deps_dependencies = [
+    "importlib-metadata>=4.9.0",
+]
 
 [tool.pdm]
 version = {from = "src/pynbox/version.py"}
@@ -70,10 +73,6 @@ allow_prereleases = true
 [tool.pdm.build]
 editable-backend = "path"
 
-[tool.pdm.overrides]
-
-# To be removed once https://github.com/flakeheaven/flakeheaven/issues/55 is solved
-"importlib-metadata" = ">=4.8.0"
 
 [tool.pdm.dev-dependencies]
 lint = [
