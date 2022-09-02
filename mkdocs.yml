@@ -10,8 +10,7 @@ nav:
   - Contributing: contributing.md
   - Architecture Decision Records:
       - adr/adr.md
-      - '001: High level problem analysis': |
-          adr/001-high_level_problem_analysis.md
+      - '001: High level problem analysis': adr/001-high_level_problem_analysis.md
       - '002: Initial program design': adr/002-initial_program_design.md
       - '003: Markup Definition': adr/003-markup_definition.md
 
@@ -37,6 +36,7 @@ markdown_extensions:
   - abbr
   - def_list
   - admonition
+  # We need the markdown-include to inject files into other files
   - markdown_include.include:
       base_path: docs
   - meta

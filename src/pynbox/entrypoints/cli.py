@@ -1,6 +1,8 @@
 """Define the command line interface."""
 
+import subprocess  # nosec
 import time
+from enum import Enum
 from typing import TYPE_CHECKING, List, Optional
 
 import click
@@ -86,6 +88,17 @@ def status(ctx: Context) -> None:
     console.print(table)
 
 
+class Choices(str, Enum):
+    """Set the possible cli choices."""
+
+    DONE = "Done"
+    COPY = "Copy to clipboard"
+    SKIP = "Skip"
+    DELETE = "Delete"
+    CHANGE = "Change type"
+    QUIT = "Quit"
+
+
 @cli.command()
 @click.argument("type_", required=False, default=None)
 @click.option("-n", "--newest", is_flag=True)
@@ -98,11 +111,12 @@ def process(ctx: Context, type_: Optional[str] = None, newest: bool = False) -> 
     config = ctx.obj["config"]
 
     choices = [
-        Choice(title="Done", shortcut_key="d"),
-        Choice(title="Skip", shortcut_key="s"),
-        Choice(title="Delete", shortcut_key="e"),
-        Choice(title="Change type", shortcut_key="c"),
-        Choice(title="Quit", shortcut_key="q"),
+        Choice(title=Choices.DONE, shortcut_key="d"),
+        Choice(title=Choices.COPY, shortcut_key="c"),
+        Choice(title=Choices.SKIP, shortcut_key="s"),
+        Choice(title=Choices.DELETE, shortcut_key="e"),
+        Choice(title=Choices.CHANGE, shortcut_key="t"),
+        Choice(title=Choices.QUIT, shortcut_key="q"),
     ]
 
     elements = views.get_elements(repo, config, type_, newest)
@@ -145,12 +159,23 @@ def _process_element(
     else:
         prompt = f"[{element.type_.title()}] {element.description}\n\n{element.body}"
     start = time.time()
-    choice = select(
-        prompt,
-        qmark="\n",
-        choices=choices,
-        use_shortcuts=True,
-    ).ask()
+    while True:
+        choice = select(
+            prompt,
+            qmark="\n",
+            choices=choices,
+            use_shortcuts=True,
+        ).ask()
+        if choice == Choices.COPY:
+            subprocess.run(  # nosec
+                ["xclip", "-selection", "clipboard", "-i"],
+                input=element.description,
+                text=True,
+                check=True,
+            )
+        else:
+            break
+
     end = time.time()
 
     if end - start > config.max_time:
@@ -164,21 +189,21 @@ def _process_element(
         console.print(text)
         print()
 
-    if choice == "Done":
+    if choice == Choices.DONE:
         element.close()
         processed_elements += 1
-    elif choice == "Delete":
+    elif choice == Choices.DELETE:
         element.delete()
         processed_elements += 1
-    elif choice == "Skip":
+    elif choice == Choices.SKIP:
         element.skip()
-    elif choice == "Change type":
+    elif choice == Choices.CHANGE:
         types = [type_.name for type_ in config.types]
         choice = select(
             "Select the new type", choices=types, default=element.type_
         ).ask()
         element.type_ = choice
-    elif choice == "Quit":
+    elif choice == Choices.QUIT:
         raise StopIteration
     repo.add(element)
     repo.commit()
