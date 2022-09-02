@@ -2,52 +2,47 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://lyz-code.github.io/pynbox/</loc>
-         <lastmod>2022-07-18</lastmod>
+         <lastmod>2022-09-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://lyz-code.github.io/pynbox/configuration/</loc>
-         <lastmod>2022-07-18</lastmod>
+         <lastmod>2022-09-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://lyz-code.github.io/pynbox/contributing/</loc>
-         <lastmod>2022-07-18</lastmod>
+         <lastmod>2022-09-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://lyz-code.github.io/pynbox/creating_new_elements/</loc>
-         <lastmod>2022-07-18</lastmod>
+         <lastmod>2022-09-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://lyz-code.github.io/pynbox/reference/</loc>
-         <lastmod>2022-07-18</lastmod>
+         <lastmod>2022-09-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://lyz-code.github.io/pynbox/adr/001-high_level_problem_analysis/</loc>
-         <lastmod>2022-07-18</lastmod>
+         <lastmod>2022-09-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://lyz-code.github.io/pynbox/adr/002-initial_program_design/</loc>
-         <lastmod>2022-07-18</lastmod>
+         <lastmod>2022-09-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://lyz-code.github.io/pynbox/adr/003-markup_definition/</loc>
-         <lastmod>2022-07-18</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://lyz-code.github.io/pynbox/adr/00X-inbox_processing_enhacements/</loc>
-         <lastmod>2022-07-18</lastmod>
+         <lastmod>2022-09-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://lyz-code.github.io/pynbox/adr/adr/</loc>
-         <lastmod>2022-07-18</lastmod>
+         <lastmod>2022-09-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
