@@ -1,3 +1,13 @@
+## 0.5.0 (2022-09-02)
+
+### Feat
+
+- add yank to possible options
+
+### Refactor
+
+- choice cli options into Choices Enum
+
 ## 0.4.1 (2022-06-09)
 
 ### Fix
