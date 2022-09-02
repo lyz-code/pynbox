@@ -78,7 +78,7 @@ dependencies = [
 
 [[package]]
 name = "bandit"
-version = "1.7.3"
+version = "1.7.4"
 requires_python = ">=3.7"
 summary = "Security oriented static analyser for python code."
 dependencies = [
@@ -1495,7 +1495,7 @@ summary = "Backport of pathlib-compatible object wrapper for zip files"
 
 [metadata]
 lock_version = "4.0"
-content_hash = "sha256:56b7585bfd6a2bf838dc45ca3f2af802a6379a97aadcf531193b3e42979d6d1c"
+content_hash = "sha256:715223c815138e07bff6c80670cc8d10b817fb9ae748e5fcdfe4833a2f867c0c"
 
 [metadata.files]
 "argcomplete 1.12.3" = [
@@ -1533,9 +1533,9 @@ content_hash = "sha256:56b7585bfd6a2bf838dc45ca3f2af802a6379a97aadcf531193b3e429
     {url = "https://files.pythonhosted.org/packages/2e/57/a4177e24f8ed700c037e1eca7620097fdfbb1c9b358601e40169adf6d364/Babel-2.10.3-py3-none-any.whl", hash = "sha256:ff56f4892c1c4bf0d814575ea23471c230d544203c7748e8c68f0089478d48eb"},
     {url = "https://files.pythonhosted.org/packages/51/27/81e9cf804a34a550a47cc2f0f57fe4935281d479ae3a0ac093d69476f221/Babel-2.10.3.tar.gz", hash = "sha256:7614553711ee97490f732126dc077f8d0ae084ebc6a96e23db1482afabdb2c51"},
 ]
-"bandit 1.7.3" = [
-    {url = "https://files.pythonhosted.org/packages/2d/c1/41e6a788a8e81677d1521a07e87cbc55132232df9cbd3ceda4dad4d7a143/bandit-1.7.3-py3-none-any.whl", hash = "sha256:3ce9b4e6a4f7f41aa966c9543e635dd35e52a793a47e746f0c55c7ecfc69d7e8"},
-    {url = "https://files.pythonhosted.org/packages/e6/0a/1fe31d6b386e46483ba66d1fc95b2b8f20ceb10ade3a76a36e0b4b128b49/bandit-1.7.3.tar.gz", hash = "sha256:58772ca951bf1129dda8a280d351547de832720bf7b5c29fac3103927980b8a6"},
+"bandit 1.7.4" = [
+    {url = "https://files.pythonhosted.org/packages/39/36/a37a2f6f8d0ed8c3bc616616ed5019e1df2680bd8b7df49ceae80fd457de/bandit-1.7.4.tar.gz", hash = "sha256:2d63a8c573417bae338962d4b9b06fbc6080f74ecd955a092849e1e65c717bd2"},
+    {url = "https://files.pythonhosted.org/packages/da/eb/ff828f4ec32c85e10d9c344e6b7f11bcacfb5d70f2fd16bea6fc1ae6df06/bandit-1.7.4-py3-none-any.whl", hash = "sha256:412d3f259dab4077d0e7f0c11f50f650cc7d10db905d98f6520a95a18049658a"},
 ]
 "beautifulsoup4 4.11.1" = [
     {url = "https://files.pythonhosted.org/packages/9c/d8/909c4089dbe4ade9f9705f143c9f13f065049a9d5e7d34c828aefdd0a97c/beautifulsoup4-4.11.1-py3-none-any.whl", hash = "sha256:58d5c3d29f5a36ffeb94f02f0d786cd53014cf9b3b3951d42e0080d8a9498d30"},
