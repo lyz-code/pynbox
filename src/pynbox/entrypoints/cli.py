@@ -75,7 +75,7 @@ def status(ctx: Context) -> None:
     status_data = views.status(repo, ctx.obj["config"])
     repo.close()
 
-    total_elements = sum([v for k, v in status_data.items()])
+    total_elements = sum(v for k, v in status_data.items())
     table = Table(box=box.MINIMAL_HEAVY_HEAD, show_footer=True)
 
     table.add_column("Type", justify="left", style="green", footer="Total")

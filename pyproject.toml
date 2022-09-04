@@ -24,7 +24,7 @@ authors = [
     {name = "Lyz", email = "lyz-code-security-advisories@riseup.net"},
 ]
 license = {text = "GPL-3.0-only"}
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 dependencies = [
     "click>=8.1.3",
     "goodconf[yaml]>=2.0.1",
@@ -68,12 +68,6 @@ allow_prereleases = true
 
 [tool.pdm.build]
 editable-backend = "path"
-
-[tool.pdm.overrides]
-
-# To be removed once https://github.com/flakeheaven/flakeheaven/issues/55 is solved
-"importlib-metadata" = ">=3.10"
-
 
 [tool.pdm.dev-dependencies]
 lint = [
