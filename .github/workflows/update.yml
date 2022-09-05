@@ -28,5 +28,23 @@ jobs:
           pdm config python.use_venv True
       - name: Update requirements
         run: make update-production
-      - name: Run tests
-        run: make all
+      - name: Test linters
+        run: make lint
+      - name: Test type checkers
+        run: make mypy
+      - name: Test security
+        run: make security
+      - name: Test with pytest
+        run: ARGS='-m "not skip_ci"' make test
+      - name: Upload Coverage
+        run: |
+          pip3 install 'coveralls[toml]'
+          coveralls --service=github
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COVERALLS_FLAG_NAME: ${{ matrix.test-name }}
+          COVERALLS_PARALLEL: true
+      - name: Test documentation
+        run: make build-docs
+      - name: Build the package
+        run: make build-package
