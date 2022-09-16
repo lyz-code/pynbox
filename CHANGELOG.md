@@ -1,3 +1,9 @@
+## 0.5.1 (2022-09-16)
+
+### Fix
+
+- copy body to clipboard too
+
 ## 0.5.0 (2022-09-02)
 
 ### Feat
