@@ -167,12 +167,7 @@ def _process_element(
             use_shortcuts=True,
         ).ask()
         if choice == Choices.COPY:
-            subprocess.run(  # nosec
-                ["xclip", "-selection", "clipboard", "-i"],
-                input=element.description,
-                text=True,
-                check=True,
-            )
+            _copy_element(element)
         else:
             break
 
@@ -208,6 +203,20 @@ def _process_element(
     repo.add(element)
     repo.commit()
     return processed_elements
+
+
+def _copy_element(element: "Element") -> None:
+    """Copy an element to the clipboard."""
+    if element.body is None:
+        clipboard = element.description
+    else:
+        clipboard = f"{element.description}\n{element.body}"
+    subprocess.run(  # nosec
+        ["xclip", "-selection", "clipboard", "-i"],
+        input=clipboard,
+        text=True,
+        check=True,
+    )
 
 
 @cli.command(hidden=True)
