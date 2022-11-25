@@ -6,6 +6,7 @@ import re
 import subprocess
 import sys
 import time
+from pathlib import Path
 from typing import Any, Generator
 
 import pexpect
@@ -13,7 +14,6 @@ import pytest
 from _pytest.capture import CaptureFixture
 from _pytest.logging import LogCaptureFixture
 from click.testing import CliRunner
-from py._path.local import LocalPath
 from repository_orm import Repository, load_repository
 
 from pynbox.config import Config
@@ -65,15 +65,15 @@ def test_verbose_is_supported(config: Config, runner: CliRunner) -> None:
 
 
 def test_load_config_handles_configerror_exceptions(
-    runner: CliRunner, tmpdir: LocalPath, caplog: LogCaptureFixture
+    runner: CliRunner, tmp_path: Path, caplog: LogCaptureFixture
 ) -> None:
     """
     Given: A wrong configuration file.
     When: CLI is initialized
     Then: The ConfigError exception is gracefully handled.
     """
-    config_file = tmpdir.join("config.yaml")  # type: ignore
-    config_file.write("[ invalid yaml")
+    config_file = tmp_path / "config.yaml"
+    config_file.write_text("[ invalid yaml")
 
     result = runner.invoke(cli, ["-c", str(config_file), "null"])
 
@@ -88,31 +88,27 @@ def test_load_config_handles_configerror_exceptions(
 
 
 def test_parse_stores_elements(
-    runner: CliRunner, config: Config, tmpdir: LocalPath, repo: Repository
+    runner: CliRunner, config: Config, tmp_path: Path, repo: Repository
 ) -> None:
     """
     Given: A configured program and a file to parse
     When: parse command line is used
     Then: the element is stored in the repository, and the file is pruned
     """
-    parse_file = f"{tmpdir}/parse.pynbox"
-    with open(parse_file, "w+", encoding="utf-8") as file_descriptor:
-        file_descriptor.write("t. Task title")
+    parse_file = tmp_path / "parse.pynbox"
+    parse_file.write_text("t. Task title")
 
-    result = runner.invoke(cli, ["parse", parse_file])
+    result = runner.invoke(cli, ["parse", str(parse_file)])
 
     assert result.exit_code == 0
     elements = repo.all(Element)
     assert len(elements) == 1
     assert elements[0].type_ == "task"
     assert elements[0].description == "Task title"
-    with open(parse_file, "r", encoding="utf-8") as file_descriptor:
-        assert file_descriptor.read() == ""
+    assert parse_file.read_text() == ""
 
 
-def test_add_elements(
-    runner: CliRunner, config: Config, tmpdir: LocalPath, repo: Repository
-) -> None:
+def test_add_elements(runner: CliRunner, config: Config, repo: Repository) -> None:
     """
     Given: A configured program
     When: add command is used
