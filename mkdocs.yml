@@ -72,6 +72,7 @@ theme:
   # logo: 'images/logo.bmp'
   features:
     - navigation.instant
+    - navigation.footer
     - navigation.top
     - content.code.annotate
 
