@@ -18,7 +18,7 @@ class LogLevel(str, Enum):
     ERROR = "error"
 
 
-class Config(GoodConf):  # type: ignore
+class Config(GoodConf):
     """Configure the frontend."""
 
     # URL specifying the connection to the database. For example:
