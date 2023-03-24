@@ -1,3 +1,5 @@
+I'm archiving the repo as I'm currently going to use Orgmode instead, if anyone wants to keep on the development please tell me and I'll redirect the people to you.
+
 # pynbox
 
 [![Actions Status](https://github.com/lyz-code/pynbox/workflows/Tests/badge.svg)](https://github.com/lyz-code/pynbox/actions)
